@@ -1,0 +1,55 @@
+#include "Arduino.h"
+#define RXD2 16
+#define TXD2 17
+//#define DEBUG
+
+unsigned char incomingByte;
+int a;
+void sendIdentifyCmd ()
+{
+  Serial2.write (0x7c);    
+  Serial2.write (0xff);
+  Serial2.write (0xff);  
+  Serial2.write (0x01);                  
+  Serial2.write (0x08);                  
+  Serial2.write (0x7d);              
+#ifdef DEBUG
+  Serial.print (0x7c);
+  Serial.print (0xff);
+  Serial.print (0xff);
+  Serial.print (0x01);
+  Serial.print (0x08);
+  Serial.print (0x7d);
+  Serial.println ();
+#endif
+}
+
+void setup ()
+{
+  Serial.begin (57600);
+  Serial2.begin(57600, SERIAL_8N1, RXD2, TXD2);
+  Serial2.println("serial2test");
+  Serial.println ("begin initial Serial!\n");
+}
+
+void loop ()
+{
+  sendIdentifyCmd ();
+  delay (1);
+  
+  while(Serial2.available () > 0)
+  {
+      incomingByte=Serial2.read ();
+      Serial.print (incomingByte,HEX);
+      Serial.print (' ');
+      
+       a++;
+      if(a==18){
+       Serial.println ();
+      a=0;}
+
+  }       
+  Serial.println ();
+  delay (2000);
+}
+
