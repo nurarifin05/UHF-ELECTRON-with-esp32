@@ -1,0 +1,64 @@
+#include "Arduino.h"
+#define RXD2 16
+#define TXD2 17
+//#define DEBUG
+
+unsigned char incomingByte; 
+int i;
+int Vnumber=17; //kedepannya memakai konversi hexa to desimal. ambil dari nilai i=0
+String tagId;
+
+void sendIdentifyCmd ()
+{
+  Serial2.write (0x7c);    
+  Serial2.write (0xff);
+  Serial2.write (0xff);  
+  Serial2.write (0x01);                  
+  Serial2.write (0x08);                  
+  Serial2.write (0x7d);              
+#ifdef DEBUG
+  Serial.print (0x7c);
+  Serial.print (0xff);
+  Serial.print (0xff);
+  Serial.print (0x01);
+  Serial.print (0x08);
+  Serial.print (0x7d);
+  Serial.println ();
+#endif
+}
+
+void setup ()
+{
+  Serial.begin (57600);
+  Serial2.begin(57600, SERIAL_8N1, RXD2, TXD2);
+  Serial2.println("serial2test");
+  Serial.println ("begin initial Serial!\n");
+  
+}
+
+void loop ()
+{
+  sendIdentifyCmd ();
+  delay (1);
+  i=0;
+  
+  while(Serial2.available () > 0 && i<=Vnumber)
+  {
+      incomingByte=Serial2.read (); 
+      
+      //kedepannya memakai konversi hexa to desimal. ambil dari nilai i=0
+      //if(i=0){
+       // Vnumber =(incomingByte,DEC);
+      //}
+      
+      if(i>3 && i<= Vnumber-2){
+        tagId = tagId+String(incomingByte,HEX);
+      }i++;
+  } 
+        if (tagId != ""){
+        Serial.println(tagId);
+        tagId="";}
+        delay(100);
+} 
+       
+     
