@@ -1,0 +1,5 @@
+mqtt topic "reader"
+mqtt user "logika"
+pass "pratama"
+
+202.154.58.25
