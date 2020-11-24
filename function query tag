@@ -1,0 +1,18 @@
+var Tag = msg.payload;
+var panjang;
+var i;
+var target = [];
+for(const array=Array.from(Tag); array.length; target.push(array.splice(0,36).join('')));
+panjang=target.length;
+console.log(target); 
+console.log('panjang=',panjang);
+for(i=0;i<panjang;i++){
+var jadi= target[i].toString();
+     jadi=jadi.slice(8,32);
+console.log('data ke: ',i,'=',jadi)
+}
+
+msg.topic = "INSERT INTO reader1(`Nomor_Tag`) VALUES ('"+ jadi+"')";
+
+//msg.payload = "INSERT INTO Reader1 (TimeStamp, Nomor_Tag) VALUES(FROM_UNIXTIME(" + Date.now()/1000 +") ,"+ jadi+")"
+return msg;
